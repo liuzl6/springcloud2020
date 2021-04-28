@@ -1,0 +1,29 @@
+server:
+  port: 8401
+
+spring:
+  application:
+    name: cloudalibaba-sentinel-service
+  cloud:
+    nacos:
+      discovery:
+        server-addr: nacos.com:80   #nacos注册中心地址  集群版
+    sentinel:
+      transport:
+        dashboard: sentinel.com:8858   #sentinel dashboard地址
+        port: 8719  #默认8719，假如被占用了会自动从8719开始依次+1扫描。直至找到未被占用的端口
+      datasource:  #sentinel持久化到nacos配置
+        ds1:
+          nacos:
+            server-addr: nacos.com:80   #nacos注册中心地址  集群版
+            dataId: ${spring.application.name}
+            groupId: DEFAULT_GROUP
+            data-type: json
+            rule-type: flow
+
+#暴露监控端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

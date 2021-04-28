@@ -1,0 +1,60 @@
+server:
+  port: 2001
+
+spring:
+  application:
+    name: seata-order-service
+  cloud:
+    nacos:
+      discovery:
+        server-addr: nacos.com:80   # nacos注册中心地址  集群版
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.20.125:3306/seata_order
+    username: root
+    password: 123456
+
+# Seata 配置项，对应 SeataProperties 类
+seata:
+  enabled: true
+  applicationId: seata-order-service   # Seata 应用编号，默认为 ${spring.application.name}
+  txServiceGroup: liuzl_tx_group   # Seata 事务组编号，用于 TC 集群名
+  enable-auto-data-source-proxy: true
+  # Seata 服务配置项，对应 ServiceProperties 类
+  config:
+    type: nacos
+    nacos:
+      namespace: 4f99ba6c-8908-4b02-a43b-eabf56a72891  # seata-config命名空间ID
+      serverAddr: nacos.com:80
+      group: SEATA_GROUP
+      userName: "nacos"
+      password: "nacos"
+  service:
+      # 虚拟组和分组的映射
+      vgroupMapping:
+        liuzl_tx_group: default
+  # Seata 注册中心配置项，对应 RegistryProperties 类
+  registry:
+    type: nacos   # 注册中心类型，默认为 file
+    nacos:
+      application: seata-server
+      serverAddr: nacos.com:80
+      namespace:
+      cluster: default # 使用的 Seata 分组
+      userName: "nacos"
+      password: "nacos"
+
+#配置日志输出级别
+logging:
+  level:
+    io:
+      seata: info
+
+#配置mybatis配置文件路径
+mybatis:
+  mapperLocations: classpath:mapper/*.xml
+
+# 解决feign请求超时
+ribbon:
+  ReadTimeout: 60000    #请求处理的超时时间
+  ConnectTimeout: 60000   #请求连接的超时时间

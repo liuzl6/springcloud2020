@@ -1,0 +1,16 @@
+#服务端口
+server:
+  port: 8006
+
+spring:
+  application:
+    name: cloud-provider-payment
+  #consul注册中心地址
+  cloud:
+    consul:
+      host: 192.168.20.125
+      port: 8500
+      discovery:
+        service-name: ${spring.application.name}  #注册在consul上面的名字，在consul的调用中，是通过此名字调用的
+        register-health-check: true   #健康检查，保证服务处于启动状态，建议开启
+        prefer-ip-address: true   #spring cloud consul默认使用hostName(“Liuzhiling”) 作为健康检查注册地址。hostName无法通过DNS解析。我们需要配置通过ip地址注册
